@@ -3,7 +3,7 @@ import scanners
 
 def main():
     parser = argparse.ArgumentParser(prog='NetProbe',
-                                     description='A CLI network scanner and port scanner.')
+                                     description='A CLI network and port scanner.')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-p', '--port-scan',
                        metavar='IPv4',
