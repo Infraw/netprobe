@@ -1,5 +1,10 @@
 import argparse
+import os
 import scanners
+
+def check_sudo():
+    # Check user has root privileges.
+    return os.geteuid() == 0
 
 def main():
     parser = argparse.ArgumentParser(prog='NetProbe',
@@ -15,13 +20,21 @@ def main():
                        metavar='IPv4',
                        type=str,
                        action='store',
-                       help='Perform a network scan to discover active hosts. Usage: -n <ip-range>')
+                       const='192.168.1.1/24',
+                       nargs='?',
+                       help='Perform a network scan to discover active hosts. Usage: -n [ip-range]')
     
     args = parser.parse_args()
     
     if args.network_scan:
-        pass
-
+        if check_sudo():
+            ip_range = args.network_scan
+            print(ip_range)
+            scanner = scanners.NetworkScanner(ip_range)
+            scanner.scan()
+            scanner.show_hosts()
+        else:
+            print("Error: you cannot perform this operation unless you are root.")
     elif args.port_scan:
         if len(args.port_scan) > 3:
             parser.error("Too many arguments for port-scan. Maximum allowed: 3.")
