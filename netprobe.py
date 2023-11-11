@@ -21,6 +21,7 @@ def main():
     
     if args.network_scan:
         pass
+
     elif args.port_scan:
         if len(args.port_scan) > 3:
             parser.error("Too many arguments for port-scan. Maximum allowed: 3.")
@@ -29,5 +30,8 @@ def main():
         start_port = int(port_range[0] if port_range and port_range[0] else 1)
         # Check port_range is not empty and check list length bigger then 1 if not set value of 65535 
         end_port = int(port_range[1] if port_range and len(port_range) else 65535)
+        scanner = scanners.PortScanner(host, start_port, end_port)
+        scanner.scan()
+        scanner.show_ports()
 if __name__ == '__main__':
     main()
